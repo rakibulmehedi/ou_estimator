@@ -1,0 +1,46 @@
+name: ou_estimator
+description: Ornstein-Uhlenbeck parameter estimator — estimate theta, mu, sigma, half-life from a price series.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State + DI
+  flutter_riverpod: ^2.5.1
+
+  # Local persistence — maintained community fork (original isar 3.1.0 codegen
+  # pins analyzer <6.0.0, incompatible with Dart 3.12).
+  isar_community: ^3.3.2
+  isar_community_flutter_libs: ^3.3.2
+  path_provider: ^2.1.4
+
+  # Mandatory visualization (locked §6.5)
+  fl_chart: ^0.69.0
+
+  # Phase 4 — premium UI: typography + entrance animations
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+  # Isar codegen (analyzer >=8 — Dart 3.12 compatible)
+  build_runner: ^2.4.13
+  isar_community_generator: ^3.3.2
+
+flutter:
+  uses-material-design: true
+
+  # Phase 4 — bundled premium type (Inter + JetBrains Mono static TTFs).
+  # google_fonts loads these from assets instead of fetching at runtime, so
+  # release builds render offline with no first-paint FOUT (OFL-licensed).
+  assets:
+    - assets/google_fonts/

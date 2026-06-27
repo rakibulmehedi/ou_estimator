@@ -1,0 +1,132 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
+import '../../../domain/use_cases/ou_estimator.dart';
+import '../../core/theme.dart';
+
+/// Grid of the four estimated O–U parameters, rendered as frosted glass panels
+/// with a staggered entrance. Pure presentation: values come from [result],
+/// which the screen reads from the existing Riverpod provider — this widget
+/// holds no state and registers no listeners.
+class MetricsPanel extends StatelessWidget {
+  const MetricsPanel({super.key, required this.result});
+
+  final OUResult result;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = <_Metric>[
+      _Metric('θ', 'Mean Reversion', result.theta.toStringAsFixed(4), 'speed'),
+      _Metric('μ', 'Equilibrium', result.mu.toStringAsFixed(4), 'long-run mean'),
+      _Metric('σ', 'Volatility', result.sigma.toStringAsFixed(4), 'diffusion'),
+      _Metric('t½', 'Half-Life', result.halfLife.toStringAsFixed(3), 'steps'),
+    ];
+
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.85,
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      children: [
+        for (var i = 0; i < items.length; i++)
+          _MetricCard(metric: items[i], index: i),
+      ],
+    );
+  }
+}
+
+class _Metric {
+  const _Metric(this.symbol, this.label, this.value, this.unit);
+  final String symbol;
+  final String label;
+  final String value;
+  final String unit;
+}
+
+class _MetricCard extends StatelessWidget {
+  const _MetricCard({required this.metric, required this.index});
+
+  final _Metric metric;
+  final int index;
+
+  // Styles depend only on static tokens — hoisted to avoid per-build allocation.
+  static final TextStyle _symbolStyle = AppTheme.mono(
+    color: AppTheme.accent,
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
+  static final TextStyle _labelStyle = AppTheme.sans(
+    color: AppTheme.textSecondary,
+    fontSize: 12,
+  );
+  static final TextStyle _valueStyle = AppTheme.mono(
+    color: AppTheme.textPrimary,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
+  // textSecondary (≈5.6:1 on the glass card) clears WCAG AA at this small size.
+  static final TextStyle _unitStyle = AppTheme.sans(
+    color: AppTheme.textSecondary,
+    fontSize: 11,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final card = RepaintBoundary(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: AppTheme.glassBlur,
+            sigmaY: AppTheme.glassBlur,
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              // ~8% white frosted overlay over the surface tone.
+              color: AppTheme.glassFill,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppTheme.glassBorder),
+            ),
+            child: Semantics(
+              label: '${metric.label}: ${metric.value} ${metric.unit}',
+              child: ExcludeSemantics(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(metric.symbol, style: _symbolStyle),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            metric.label,
+                            style: _labelStyle,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(metric.value, style: _valueStyle),
+                    Text(metric.unit, style: _unitStyle),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Presentation-only staggered entrance. No rebuild/state coupling.
+    return card
+        .animate(delay: (index * 80).ms)
+        .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+        .slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOut);
+  }
+}
