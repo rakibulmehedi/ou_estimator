@@ -7,12 +7,16 @@ class EstimationState {
     this.result,
     this.error,
     this.loading = false,
+    this.unitLabel = 'step',
   });
 
   final List<double> series;
   final OUResult? result;
   final String? error;
   final bool loading;
+
+  /// Singular unit label for the active Δt (e.g. 'day'); annotates θ / half-life.
+  final String unitLabel;
 
   bool get hasResult => result != null;
 
@@ -21,6 +25,7 @@ class EstimationState {
     OUResult? result,
     String? error,
     bool? loading,
+    String? unitLabel,
     bool clearError = false,
     bool clearResult = false,
   }) {
@@ -29,6 +34,7 @@ class EstimationState {
       result: clearResult ? null : (result ?? this.result),
       error: clearError ? null : (error ?? this.error),
       loading: loading ?? this.loading,
+      unitLabel: unitLabel ?? this.unitLabel,
     );
   }
 }

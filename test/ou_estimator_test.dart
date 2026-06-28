@@ -94,4 +94,13 @@ void main() {
       // Also acceptable: b landed >= 1.
     }
   });
+
+  test('dt scales theta inversely and half-life proportionally', () {
+    final estimator = OUEstimator();
+    final series = _meanReverting(n: 60, b: 0.8, mu: 10.0, noise: 0.3);
+    final r1 = estimator.estimate(series, dt: 1.0);
+    final r2 = estimator.estimate(series, dt: 2.0);
+    expect(r2.theta, closeTo(r1.theta / 2, 1e-9));
+    expect(r2.halfLife, closeTo(r1.halfLife * 2, 1e-9));
+  });
 }
