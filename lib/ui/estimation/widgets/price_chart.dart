@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
+import '../../core/tokens.dart';
 
 /// Line chart of the input price series with a horizontal dashed line at the
 /// equilibrium mean (μ). Y axis scales dynamically to the series min/max (and
@@ -112,7 +113,7 @@ class PriceChart extends StatelessWidget {
               },
               touchTooltipData: LineTouchTooltipData(
                 getTooltipColor: (_) => AppTheme.surfaceElevated,
-                tooltipRoundedRadius: 8,
+                tooltipRoundedRadius: Radii.sm,
                 tooltipPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 tooltipBorder: const BorderSide(color: AppTheme.glassBorder),

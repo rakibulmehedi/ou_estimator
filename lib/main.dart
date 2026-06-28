@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'data/services/isar_service.dart';
 import 'providers/providers.dart';
 import 'ui/core/theme.dart';
-import 'ui/estimation/estimation_screen.dart';
+import 'ui/shell/app_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,7 @@ class OUApp extends StatelessWidget {
       title: 'O-U Estimator',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      home: const EstimationScreen(),
+      home: const AppShell(),
     );
   }
 }

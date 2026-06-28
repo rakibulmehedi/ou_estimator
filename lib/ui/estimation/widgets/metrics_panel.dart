@@ -1,10 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../domain/use_cases/ou_estimator.dart';
 import '../../core/theme.dart';
+import '../../core/tokens.dart';
+import '../../core/widgets/glass_card.dart';
 
 /// Grid of the four estimated O–U parameters, rendered as frosted glass panels
 /// with a staggered entrance. Pure presentation: values come from [result],
@@ -76,48 +76,31 @@ class _MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = RepaintBoundary(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: AppTheme.glassBlur,
-            sigmaY: AppTheme.glassBlur,
-          ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              // ~8% white frosted overlay over the surface tone.
-              color: AppTheme.glassFill,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.glassBorder),
-            ),
-            child: Semantics(
-              label: '${metric.label}: ${metric.value} ${metric.unit}',
-              child: ExcludeSemantics(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(metric.symbol, style: _symbolStyle),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            metric.label,
-                            style: _labelStyle,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+    final card = GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Semantics(
+        label: '${metric.label}: ${metric.value} ${metric.unit}',
+        child: ExcludeSemantics(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(metric.symbol, style: _symbolStyle),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      metric.label,
+                      style: _labelStyle,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    Text(metric.value, style: _valueStyle),
-                    Text(metric.unit, style: _unitStyle),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
+              Text(metric.value, style: _valueStyle),
+              Text(metric.unit, style: _unitStyle),
+            ],
           ),
         ),
       ),
@@ -126,7 +109,7 @@ class _MetricCard extends StatelessWidget {
     // Presentation-only staggered entrance. No rebuild/state coupling.
     return card
         .animate(delay: (index * 80).ms)
-        .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-        .slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOut);
+        .fadeIn(duration: Motion.slow, curve: Motion.curve)
+        .slideY(begin: 0.1, end: 0, duration: Motion.slow, curve: Motion.curve);
   }
 }
