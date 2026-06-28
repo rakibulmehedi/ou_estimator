@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/providers.dart';
 import '../core/tokens.dart';
 import '../core/widgets/section_label.dart';
+import 'estimation_controller.dart';
 import 'estimation_state.dart';
 import 'widgets/metrics_panel.dart';
 import 'widgets/price_chart.dart';
@@ -85,7 +86,7 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
     );
   }
 
-  Widget _buildInput(EstimationState state, dynamic notifier) {
+  Widget _buildInput(EstimationState state, EstimationController notifier) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -130,6 +131,7 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          const SizedBox(height: Spacing.xl),
           MetricsPanel(result: state.result!),
           const SizedBox(height: Spacing.xl),
           const SectionLabel('Series & equilibrium (μ)'),
