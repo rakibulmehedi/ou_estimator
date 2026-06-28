@@ -20,6 +20,9 @@ dependencies:
   isar_community_flutter_libs: ^3.3.2
   path_provider: ^2.1.4
 
+  # File import for CSV/TXT price series (sub-project #2).
+  file_picker: ^8.1.0
+
   # Mandatory visualization (locked §6.5)
   fl_chart: ^0.69.0
 

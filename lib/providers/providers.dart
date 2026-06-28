@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
 
 import '../data/repositories/estimation_repository.dart';
+import '../data/services/file_import_service.dart';
 import '../data/services/text_input_parser.dart';
 import '../domain/use_cases/ou_estimator.dart';
 import '../ui/estimation/estimation_controller.dart';
@@ -14,6 +15,9 @@ final isarProvider = Provider<Isar>((ref) {
 
 final textInputParserProvider =
     Provider<TextInputParser>((ref) => const TextInputParser());
+
+final fileImportServiceProvider =
+    Provider<FileImportService>((ref) => const FileImportService());
 
 final ouEstimatorProvider = Provider<OUEstimator>((ref) => OUEstimator());
 
