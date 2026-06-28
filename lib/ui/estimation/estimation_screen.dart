@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/providers.dart';
+import '../core/theme.dart';
 import '../core/tokens.dart';
 import '../core/widgets/section_label.dart';
 import 'estimation_controller.dart';
@@ -198,12 +199,13 @@ class _Legend extends StatelessWidget {
       children: [
         _swatch(scheme.primary, solid: true),
         const SizedBox(width: 6),
-        const Text('Price', style: TextStyle(color: Colors.white60, fontSize: 12)),
+        const Text('Price',
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
         const SizedBox(width: 20),
         _swatch(Colors.redAccent, solid: false),
         const SizedBox(width: 6),
         const Text('μ equilibrium',
-            style: TextStyle(color: Colors.white60, fontSize: 12)),
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
       ],
     );
   }
@@ -228,12 +230,13 @@ class _EmptyHint extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(Icons.show_chart, size: 56, color: Colors.white.withValues(alpha: 0.18)),
+        Icon(Icons.show_chart,
+            size: 56, color: AppTheme.textPrimary.withValues(alpha: 0.18)),
         const SizedBox(height: 12),
         const Text(
           'Enter a price series and tap Compute\nto estimate the O–U parameters.',
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white38),
+          style: TextStyle(color: AppTheme.textTertiary),
         ),
       ],
     );
