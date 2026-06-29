@@ -1,6 +1,7 @@
 import 'package:isar_community/isar.dart';
 
 import '../../domain/use_cases/ou_estimator.dart';
+import '../../domain/value/estimation_method.dart';
 import '../models/ou_metrics.dart';
 import '../models/time_series_data.dart';
 
