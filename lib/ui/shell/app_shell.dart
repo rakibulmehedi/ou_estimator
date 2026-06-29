@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/providers.dart';
 import '../core/tokens.dart';
 import 'destinations.dart';
 
-/// Adaptive navigation scaffold. Shows a [NavigationRail] at medium/expanded
-/// widths and a [NavigationBar] at compact widths. Destinations are kept alive
-/// via [IndexedStack] so each screen preserves its state across tab switches.
-/// Selected index is local state — no provider.
-class AppShell extends StatefulWidget {
+/// Adaptive navigation scaffold. Selected tab is driven by [selectedTabProvider]
+/// so child screens (e.g. HistoryScreen) can switch tabs programmatically.
+class AppShell extends ConsumerWidget {
   const AppShell({super.key});
 
   @override
-  State<AppShell> createState() => _AppShellState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final index = ref.watch(selectedTabProvider);
+    void select(int i) => ref.read(selectedTabProvider.notifier).state = i;
 
-class _AppShellState extends State<AppShell> {
-  int _index = 0;
-
-  void _select(int i) => setState(() => _index = i);
-
-  @override
-  Widget build(BuildContext context) {
     final body = IndexedStack(
-      index: _index,
+      index: index,
       children: [for (final d in appDestinations) d.builder(context)],
     );
 
@@ -33,8 +27,8 @@ class _AppShellState extends State<AppShell> {
             body: Row(
               children: [
                 NavigationRail(
-                  selectedIndex: _index,
-                  onDestinationSelected: _select,
+                  selectedIndex: index,
+                  onDestinationSelected: select,
                   labelType: NavigationRailLabelType.all,
                   destinations: [
                     for (final d in appDestinations)
@@ -54,8 +48,8 @@ class _AppShellState extends State<AppShell> {
         return Scaffold(
           body: body,
           bottomNavigationBar: NavigationBar(
-            selectedIndex: _index,
-            onDestinationSelected: _select,
+            selectedIndex: index,
+            onDestinationSelected: select,
             destinations: [
               for (final d in appDestinations)
                 NavigationDestination(
