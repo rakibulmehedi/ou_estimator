@@ -6,6 +6,21 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- MLE estimator via exact O-U transition density (Nelder-Mead simplex, pure Dart)
+- OLS/MLE toggle `SegmentedButton` in input panel
+- Fit diagnostics panel: R², residual std, log-likelihood, observation count
+- History screen: list of saved runs with method badge, θ, t½, relative timestamp
+- History actions: tap to reload series into estimator, rename, delete
+- Export/Share: JSON via native OS share sheet (`share_plus`)
+- Share button on estimation screen results and each history run card
+- `selectedTabProvider` — programmatic tab switching from History → Estimation
+- `seriesTextProvider` — syncs `TextField` when loading a run from history
+- `historyProvider` (`FutureProvider.autoDispose`) for reactive history list
+- `loadAll()`, `rename()`, `delete()` on `EstimationRepository`
+- Nullable diagnostic fields on `OUMetrics` (`rSquared`, `residualStd`, `logLikelihood`, `samplingIntervalSeconds`)
+- `EstimationMethod` enum moved to domain layer (`lib/domain/value/estimation_method.dart`)
+
 ## [1.0.0] — 2026-06-28
 
 ### Added
