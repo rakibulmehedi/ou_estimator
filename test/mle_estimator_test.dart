@@ -72,4 +72,21 @@ void main() {
       throwsA(isA<ArgumentError>()),
     );
   });
+
+  test('halfLife is positive and finite', () {
+    final result = MLEEstimator().estimate(_meanReverting(n: 200), dt: 1.0);
+    expect(result.halfLife, greaterThan(0));
+    expect(result.halfLife.isFinite, isTrue);
+  });
+
+  test('logLikelihood is finite', () {
+    final result = MLEEstimator().estimate(_meanReverting(n: 200), dt: 1.0);
+    expect(result.logLikelihood.isFinite, isTrue);
+  });
+
+  test('residualStd is positive and finite', () {
+    final result = MLEEstimator().estimate(_meanReverting(n: 200), dt: 1.0);
+    expect(result.residualStd, greaterThan(0));
+    expect(result.residualStd.isFinite, isTrue);
+  });
 }

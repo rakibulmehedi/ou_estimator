@@ -136,4 +136,22 @@ void main() {
         OUEstimator().estimate([8.0, 9.0, 9.5, 9.8, 10.0]);
     expect(result.method, EstimationMethod.ols);
   });
+
+  test('J: throws ArgumentError when dt <= 0', () {
+    expect(
+      () => OUEstimator().estimate([1.0, 2.0, 3.0], dt: 0.0),
+      throwsA(isA<ArgumentError>()),
+    );
+    expect(
+      () => OUEstimator().estimate([1.0, 2.0, 3.0], dt: -1.0),
+      throwsA(isA<ArgumentError>()),
+    );
+  });
+
+  test('K: throws NonStationaryException for a constant series', () {
+    expect(
+      () => OUEstimator().estimate([5.0, 5.0, 5.0, 5.0, 5.0]),
+      throwsA(isA<NonStationaryException>()),
+    );
+  });
 }
