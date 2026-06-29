@@ -17,6 +17,7 @@ class ExportService {
     double samplingIntervalSeconds,
   ) {
     return const JsonEncoder.withIndent('  ').convert({
+      'version': 1,
       'name': name,
       'method': result.method.name,
       'estimatedAt': DateTime.now().toUtc().toIso8601String(),
@@ -38,6 +39,7 @@ class ExportService {
 
   String metricsToJson(OUMetrics metrics) {
     return const JsonEncoder.withIndent('  ').convert({
+      'version': 1,
       'name': metrics.datasetName,
       'method': metrics.method.name,
       'estimatedAt': metrics.estimatedAt.toUtc().toIso8601String(),

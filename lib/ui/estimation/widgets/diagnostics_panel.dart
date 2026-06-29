@@ -13,6 +13,8 @@ class DiagnosticsPanel extends StatelessWidget {
 
   final OUResult result;
 
+  static const double _cardAspectRatio = 1.85;
+
   @override
   Widget build(BuildContext context) {
     final items = [
@@ -26,9 +28,9 @@ class DiagnosticsPanel extends StatelessWidget {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 1.85,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
+      childAspectRatio: _cardAspectRatio,
+      mainAxisSpacing: Spacing.md,
+      crossAxisSpacing: Spacing.md,
       children: [
         for (var i = 0; i < items.length; i++)
           _DiagnosticCard(metric: items[i], index: i),

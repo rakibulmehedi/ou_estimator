@@ -28,7 +28,7 @@ class EstimationController extends Notifier<EstimationState> {
         bestUnit = u;
       }
     }
-    final label = bestUnit == DtUnit.steps ? 'step' : bestUnit.label;
+    final label = bestUnit.label;
 
     ref.read(seriesTextProvider.notifier).state = series.join('\n');
     state = EstimationState(

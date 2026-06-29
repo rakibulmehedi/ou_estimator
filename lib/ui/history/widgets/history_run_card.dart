@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/ou_metrics.dart';
-import '../../../data/services/export_service.dart';
 import '../../../domain/value/estimation_method.dart';
 import '../../../providers/providers.dart';
 import '../../core/theme.dart';
@@ -26,16 +25,15 @@ class HistoryRunCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final repo = ref.read(estimationRepositoryProvider);
-    const svc = ExportService();
+    final svc = ref.read(exportServiceProvider);
 
-    Future<void> handleTap() {
+    void handleTap() {
       final ds = metrics.dataset.value;
-      if (ds == null) return Future.value();
+      if (ds == null) return;
       ref
           .read(estimationControllerProvider.notifier)
           .loadFromHistory(ds.values, ds.samplingIntervalSeconds);
       ref.read(selectedTabProvider.notifier).state = 0;
-      return Future.value();
     }
 
     Future<void> handleDelete() async {
@@ -98,7 +96,15 @@ class HistoryRunCard extends ConsumerWidget {
 
     Future<void> handleShare() async {
       final json = svc.metricsToJson(metrics);
-      await svc.share(json, runName: metrics.datasetName);
+      try {
+        await svc.share(json, runName: metrics.datasetName);
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Export failed: $e')),
+          );
+        }
+      }
     }
 
     final methodBadgeColor = metrics.method == EstimationMethod.mle

@@ -135,7 +135,15 @@ class _ShareButton extends ConsumerWidget {
             name,
             state.samplingIntervalSeconds ?? 0.0,
           );
-          await svc.share(json, runName: name);
+          try {
+            await svc.share(json, runName: name);
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Export failed: $e')),
+              );
+            }
+          }
         },
       ),
     );
