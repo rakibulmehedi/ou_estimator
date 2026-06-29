@@ -5,8 +5,8 @@ import '../../providers/providers.dart';
 import '../core/theme.dart';
 import '../core/tokens.dart';
 import '../core/widgets/section_label.dart';
-import 'estimation_controller.dart';
 import 'estimation_state.dart';
+import 'widgets/input_panel.dart';
 import 'widgets/metrics_panel.dart';
 import 'widgets/price_chart.dart';
 
@@ -19,20 +19,9 @@ class EstimationScreen extends ConsumerStatefulWidget {
 }
 
 class _EstimationScreenState extends ConsumerState<EstimationScreen> {
-  final _controller = TextEditingController(
-    text: '10, 9.4, 9.8, 10.3, 9.9, 10.1, 9.7, 10.0, 10.2, 9.85, 10.05, 9.95',
-  );
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(estimationControllerProvider);
-    final notifier = ref.read(estimationControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,11 +36,11 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
                 key: const Key('estimation-two-pane'),
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
+                  const Expanded(
                     flex: 2,
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(Spacing.xl),
-                      child: _buildInput(state, notifier),
+                      padding: EdgeInsets.all(Spacing.xl),
+                      child: InputPanel(),
                     ),
                   ),
                   const VerticalDivider(width: 1),
@@ -74,7 +63,7 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _buildInput(state, notifier),
+                      const InputPanel(),
                       _buildResults(state),
                     ],
                   ),
@@ -87,53 +76,13 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
     );
   }
 
-  Widget _buildInput(EstimationState state, EstimationController notifier) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SectionLabel('Price series  ·  comma-separated, uniform Δt'),
-        const SizedBox(height: Spacing.sm),
-        TextField(
-          controller: _controller,
-          minLines: 2,
-          maxLines: 5,
-          keyboardType: TextInputType.multiline,
-          style: const TextStyle(
-            fontFeatures: [FontFeature.tabularFigures()],
-          ),
-          decoration: const InputDecoration(
-            hintText: 'e.g. 10, 9.8, 10.2, 9.9, ...',
-          ),
-        ),
-        const SizedBox(height: Spacing.md),
-        FilledButton.icon(
-          onPressed: state.loading
-              ? null
-              : () => notifier.compute(_controller.text),
-          icon: state.loading
-              ? const SizedBox(
-                  height: 18,
-                  width: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Icon(Icons.calculate_outlined),
-          label: const Text('Compute'),
-        ),
-        if (state.error != null) ...[
-          const SizedBox(height: Spacing.lg),
-          _ErrorBanner(message: state.error!),
-        ],
-      ],
-    );
-  }
-
   Widget _buildResults(EstimationState state) {
     if (state.hasResult) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: Spacing.xl),
-          MetricsPanel(result: state.result!),
+          MetricsPanel(result: state.result!, unitLabel: state.unitLabel),
           const SizedBox(height: Spacing.xl),
           const SectionLabel('Series & equilibrium (μ)'),
           const SizedBox(height: Spacing.md),
@@ -156,36 +105,6 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
       );
     }
     return const SizedBox.shrink();
-  }
-}
-
-class _ErrorBanner extends StatelessWidget {
-  const _ErrorBanner({required this.message});
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: scheme.errorContainer.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: scheme.error.withValues(alpha: 0.5)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.error_outline, color: scheme.error, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              message,
-              style: TextStyle(color: scheme.onErrorContainer),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
