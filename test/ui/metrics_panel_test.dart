@@ -2,13 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ou_estimator/domain/use_cases/ou_estimator.dart';
+import 'package:ou_estimator/domain/value/estimation_method.dart';
 import 'package:ou_estimator/ui/core/theme.dart';
 import 'package:ou_estimator/ui/estimation/widgets/metrics_panel.dart';
 
 void main() {
   testWidgets('renders the unit label on θ and half-life', (tester) async {
-    const result =
-        OUResult(theta: 0.3, mu: 10.0, sigma: 0.5, halfLife: 2.3);
+    const result = OUResult(
+      theta: 0.3,
+      mu: 10.0,
+      sigma: 0.5,
+      halfLife: 2.3,
+      rSquared: 0.97,
+      residualStd: 0.1,
+      logLikelihood: -45.0,
+      numObservations: 99,
+      method: EstimationMethod.ols,
+    );
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.dark,
