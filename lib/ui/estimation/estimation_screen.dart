@@ -6,6 +6,7 @@ import '../core/theme.dart';
 import '../core/tokens.dart';
 import '../core/widgets/section_label.dart';
 import 'estimation_state.dart';
+import 'widgets/diagnostics_panel.dart';
 import 'widgets/input_panel.dart';
 import 'widgets/metrics_panel.dart';
 import 'widgets/price_chart.dart';
@@ -83,6 +84,10 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
         children: [
           const SizedBox(height: Spacing.xl),
           MetricsPanel(result: state.result!, unitLabel: state.unitLabel),
+          const SizedBox(height: Spacing.xl),
+          const SectionLabel('Fit diagnostics'),
+          const SizedBox(height: Spacing.md),
+          DiagnosticsPanel(result: state.result!),
           const SizedBox(height: Spacing.xl),
           const SectionLabel('Series & equilibrium (μ)'),
           const SizedBox(height: Spacing.md),

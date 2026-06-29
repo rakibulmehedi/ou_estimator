@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/services/text_input_parser.dart';
 import '../../../domain/value/dt_unit.dart';
+import '../../../domain/value/estimation_method.dart';
 import '../../../providers/providers.dart';
 import '../../core/theme.dart';
 import '../../core/tokens.dart';
@@ -70,6 +71,17 @@ class _InputPanelState extends ConsumerState<InputPanel> {
     final state = ref.watch(estimationControllerProvider);
     final notifier = ref.read(estimationControllerProvider.notifier);
 
+    ref.listen<String>(seriesTextProvider, (_, next) {
+      if (next.isNotEmpty && _seriesController.text != next) {
+        _seriesController.text = next;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            ref.read(seriesTextProvider.notifier).state = '';
+          }
+        });
+      }
+    });
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -125,6 +137,22 @@ class _InputPanelState extends ConsumerState<InputPanel> {
               ),
             ),
           ],
+        ),
+        const SizedBox(height: Spacing.lg),
+        SegmentedButton<EstimationMethod>(
+          segments: const [
+            ButtonSegment(
+              value: EstimationMethod.ols,
+              label: Text('OLS'),
+            ),
+            ButtonSegment(
+              value: EstimationMethod.mle,
+              label: Text('MLE'),
+            ),
+          ],
+          selected: {state.method},
+          onSelectionChanged: (selection) =>
+              notifier.setMethod(selection.first),
         ),
         const SizedBox(height: Spacing.lg),
         OutlinedButton.icon(

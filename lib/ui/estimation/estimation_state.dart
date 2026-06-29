@@ -1,4 +1,5 @@
 import '../../domain/use_cases/ou_estimator.dart';
+import '../../domain/value/estimation_method.dart';
 
 /// Immutable snapshot of the estimation screen.
 class EstimationState {
@@ -8,6 +9,8 @@ class EstimationState {
     this.error,
     this.loading = false,
     this.unitLabel = 'step',
+    this.method = EstimationMethod.ols,
+    this.samplingIntervalSeconds,
   });
 
   final List<double> series;
@@ -15,8 +18,10 @@ class EstimationState {
   final String? error;
   final bool loading;
 
-  /// Singular unit label for the active Δt (e.g. 'day'); annotates θ / half-life.
+  /// Singular Δt unit label (e.g. 'day') for θ ("per <label>") and half-life.
   final String unitLabel;
+  final EstimationMethod method;
+  final double? samplingIntervalSeconds;
 
   bool get hasResult => result != null;
 
@@ -26,6 +31,8 @@ class EstimationState {
     String? error,
     bool? loading,
     String? unitLabel,
+    EstimationMethod? method,
+    double? samplingIntervalSeconds,
     bool clearError = false,
     bool clearResult = false,
   }) {
@@ -35,6 +42,9 @@ class EstimationState {
       error: clearError ? null : (error ?? this.error),
       loading: loading ?? this.loading,
       unitLabel: unitLabel ?? this.unitLabel,
+      method: method ?? this.method,
+      samplingIntervalSeconds:
+          samplingIntervalSeconds ?? this.samplingIntervalSeconds,
     );
   }
 }
