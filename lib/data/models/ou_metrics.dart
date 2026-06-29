@@ -19,6 +19,12 @@ class OUMetrics {
   late double halfLife;
   late int numObservations;
 
+  // Nullable so existing rows (written before this schema version) stay valid.
+  double? rSquared;
+  double? residualStd;
+  double? logLikelihood;
+  double? samplingIntervalSeconds;
+
   @enumerated
   late EstimationMethod method;
 

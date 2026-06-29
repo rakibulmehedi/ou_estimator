@@ -32,29 +32,49 @@ const OUMetricsSchema = CollectionSchema(
       name: r'halfLife',
       type: IsarType.double,
     ),
-    r'method': PropertySchema(
+    r'logLikelihood': PropertySchema(
       id: 3,
+      name: r'logLikelihood',
+      type: IsarType.double,
+    ),
+    r'method': PropertySchema(
+      id: 4,
       name: r'method',
       type: IsarType.byte,
       enumMap: _OUMetricsmethodEnumValueMap,
     ),
     r'mu': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'mu',
       type: IsarType.double,
     ),
     r'numObservations': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'numObservations',
       type: IsarType.long,
     ),
+    r'rSquared': PropertySchema(
+      id: 7,
+      name: r'rSquared',
+      type: IsarType.double,
+    ),
+    r'residualStd': PropertySchema(
+      id: 8,
+      name: r'residualStd',
+      type: IsarType.double,
+    ),
+    r'samplingIntervalSeconds': PropertySchema(
+      id: 9,
+      name: r'samplingIntervalSeconds',
+      type: IsarType.double,
+    ),
     r'sigma': PropertySchema(
-      id: 6,
+      id: 10,
       name: r'sigma',
       type: IsarType.double,
     ),
     r'theta': PropertySchema(
-      id: 7,
+      id: 11,
       name: r'theta',
       type: IsarType.double,
     )
@@ -113,11 +133,15 @@ void _oUMetricsSerialize(
   writer.writeString(offsets[0], object.datasetName);
   writer.writeDateTime(offsets[1], object.estimatedAt);
   writer.writeDouble(offsets[2], object.halfLife);
-  writer.writeByte(offsets[3], object.method.index);
-  writer.writeDouble(offsets[4], object.mu);
-  writer.writeLong(offsets[5], object.numObservations);
-  writer.writeDouble(offsets[6], object.sigma);
-  writer.writeDouble(offsets[7], object.theta);
+  writer.writeDouble(offsets[3], object.logLikelihood);
+  writer.writeByte(offsets[4], object.method.index);
+  writer.writeDouble(offsets[5], object.mu);
+  writer.writeLong(offsets[6], object.numObservations);
+  writer.writeDouble(offsets[7], object.rSquared);
+  writer.writeDouble(offsets[8], object.residualStd);
+  writer.writeDouble(offsets[9], object.samplingIntervalSeconds);
+  writer.writeDouble(offsets[10], object.sigma);
+  writer.writeDouble(offsets[11], object.theta);
 }
 
 OUMetrics _oUMetricsDeserialize(
@@ -131,13 +155,17 @@ OUMetrics _oUMetricsDeserialize(
   object.estimatedAt = reader.readDateTime(offsets[1]);
   object.halfLife = reader.readDouble(offsets[2]);
   object.id = id;
+  object.logLikelihood = reader.readDoubleOrNull(offsets[3]);
   object.method =
-      _OUMetricsmethodValueEnumMap[reader.readByteOrNull(offsets[3])] ??
+      _OUMetricsmethodValueEnumMap[reader.readByteOrNull(offsets[4])] ??
           EstimationMethod.ols;
-  object.mu = reader.readDouble(offsets[4]);
-  object.numObservations = reader.readLong(offsets[5]);
-  object.sigma = reader.readDouble(offsets[6]);
-  object.theta = reader.readDouble(offsets[7]);
+  object.mu = reader.readDouble(offsets[5]);
+  object.numObservations = reader.readLong(offsets[6]);
+  object.rSquared = reader.readDoubleOrNull(offsets[7]);
+  object.residualStd = reader.readDoubleOrNull(offsets[8]);
+  object.samplingIntervalSeconds = reader.readDoubleOrNull(offsets[9]);
+  object.sigma = reader.readDouble(offsets[10]);
+  object.theta = reader.readDouble(offsets[11]);
   return object;
 }
 
@@ -155,15 +183,23 @@ P _oUMetricsDeserializeProp<P>(
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 4:
       return (_OUMetricsmethodValueEnumMap[reader.readByteOrNull(offset)] ??
           EstimationMethod.ols) as P;
-    case 4:
-      return (reader.readDouble(offset)) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
-    case 6:
       return (reader.readDouble(offset)) as P;
+    case 6:
+      return (reader.readLong(offset)) as P;
     case 7:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 8:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 9:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 10:
+      return (reader.readDouble(offset)) as P;
+    case 11:
       return (reader.readDouble(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -620,6 +656,90 @@ extension OUMetricsQueryFilter
     });
   }
 
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      logLikelihoodIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'logLikelihood',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      logLikelihoodIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'logLikelihood',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      logLikelihoodEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'logLikelihood',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      logLikelihoodGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'logLikelihood',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      logLikelihoodLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'logLikelihood',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      logLikelihoodBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'logLikelihood',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
   QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> methodEqualTo(
       EstimationMethod value) {
     return QueryBuilder.apply(this, (query) {
@@ -787,6 +907,250 @@ extension OUMetricsQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> rSquaredIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'rSquared',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      rSquaredIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'rSquared',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> rSquaredEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rSquared',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> rSquaredGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'rSquared',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> rSquaredLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'rSquared',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> rSquaredBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'rSquared',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      residualStdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'residualStd',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      residualStdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'residualStd',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> residualStdEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'residualStd',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      residualStdGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'residualStd',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> residualStdLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'residualStd',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition> residualStdBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'residualStd',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      samplingIntervalSecondsIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'samplingIntervalSeconds',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      samplingIntervalSecondsIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'samplingIntervalSeconds',
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      samplingIntervalSecondsEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'samplingIntervalSeconds',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      samplingIntervalSecondsGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'samplingIntervalSeconds',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      samplingIntervalSecondsLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'samplingIntervalSeconds',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterFilterCondition>
+      samplingIntervalSecondsBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'samplingIntervalSeconds',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -972,6 +1336,18 @@ extension OUMetricsQuerySortBy on QueryBuilder<OUMetrics, OUMetrics, QSortBy> {
     });
   }
 
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByLogLikelihood() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'logLikelihood', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByLogLikelihoodDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'logLikelihood', Sort.desc);
+    });
+  }
+
   QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByMethod() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'method', Sort.asc);
@@ -1005,6 +1381,44 @@ extension OUMetricsQuerySortBy on QueryBuilder<OUMetrics, OUMetrics, QSortBy> {
   QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByNumObservationsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numObservations', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByRSquared() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rSquared', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByRSquaredDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rSquared', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByResidualStd() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'residualStd', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> sortByResidualStdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'residualStd', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy>
+      sortBySamplingIntervalSeconds() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'samplingIntervalSeconds', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy>
+      sortBySamplingIntervalSecondsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'samplingIntervalSeconds', Sort.desc);
     });
   }
 
@@ -1083,6 +1497,18 @@ extension OUMetricsQuerySortThenBy
     });
   }
 
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByLogLikelihood() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'logLikelihood', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByLogLikelihoodDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'logLikelihood', Sort.desc);
+    });
+  }
+
   QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByMethod() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'method', Sort.asc);
@@ -1116,6 +1542,44 @@ extension OUMetricsQuerySortThenBy
   QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByNumObservationsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numObservations', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByRSquared() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rSquared', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByRSquaredDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'rSquared', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByResidualStd() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'residualStd', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy> thenByResidualStdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'residualStd', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy>
+      thenBySamplingIntervalSeconds() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'samplingIntervalSeconds', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QAfterSortBy>
+      thenBySamplingIntervalSecondsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'samplingIntervalSeconds', Sort.desc);
     });
   }
 
@@ -1165,6 +1629,12 @@ extension OUMetricsQueryWhereDistinct
     });
   }
 
+  QueryBuilder<OUMetrics, OUMetrics, QDistinct> distinctByLogLikelihood() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'logLikelihood');
+    });
+  }
+
   QueryBuilder<OUMetrics, OUMetrics, QDistinct> distinctByMethod() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'method');
@@ -1180,6 +1650,25 @@ extension OUMetricsQueryWhereDistinct
   QueryBuilder<OUMetrics, OUMetrics, QDistinct> distinctByNumObservations() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'numObservations');
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QDistinct> distinctByRSquared() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'rSquared');
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QDistinct> distinctByResidualStd() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'residualStd');
+    });
+  }
+
+  QueryBuilder<OUMetrics, OUMetrics, QDistinct>
+      distinctBySamplingIntervalSeconds() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'samplingIntervalSeconds');
     });
   }
 
@@ -1222,6 +1711,12 @@ extension OUMetricsQueryProperty
     });
   }
 
+  QueryBuilder<OUMetrics, double?, QQueryOperations> logLikelihoodProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'logLikelihood');
+    });
+  }
+
   QueryBuilder<OUMetrics, EstimationMethod, QQueryOperations> methodProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'method');
@@ -1237,6 +1732,25 @@ extension OUMetricsQueryProperty
   QueryBuilder<OUMetrics, int, QQueryOperations> numObservationsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'numObservations');
+    });
+  }
+
+  QueryBuilder<OUMetrics, double?, QQueryOperations> rSquaredProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'rSquared');
+    });
+  }
+
+  QueryBuilder<OUMetrics, double?, QQueryOperations> residualStdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'residualStd');
+    });
+  }
+
+  QueryBuilder<OUMetrics, double?, QQueryOperations>
+      samplingIntervalSecondsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'samplingIntervalSeconds');
     });
   }
 
