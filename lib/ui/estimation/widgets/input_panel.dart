@@ -60,7 +60,7 @@ class _InputPanelState extends ConsumerState<InputPanel> {
 
   Future<void> _importFile() async {
     final text = await ref.read(fileImportServiceProvider).pickTextFile();
-    if (text == null) return;
+    if (text == null || !mounted) return;
     _seriesController.text = text.trim();
     // The listener fires on programmatic text changes too, refreshing _parsed.
   }
