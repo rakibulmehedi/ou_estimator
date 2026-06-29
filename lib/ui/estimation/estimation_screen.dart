@@ -100,6 +100,8 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
           ),
           const SizedBox(height: Spacing.md),
           const _Legend(),
+          const SizedBox(height: Spacing.md),
+          _ShareButton(state: state),
         ],
       );
     }
@@ -110,6 +112,33 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
       );
     }
     return const SizedBox.shrink();
+  }
+}
+
+class _ShareButton extends ConsumerWidget {
+  const _ShareButton({required this.state});
+
+  final EstimationState state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: OutlinedButton.icon(
+        icon: const Icon(Icons.share_rounded, size: 18),
+        label: const Text('Export JSON'),
+        onPressed: () async {
+          final svc = ref.read(exportServiceProvider);
+          final name = 'ou-${DateTime.now().millisecondsSinceEpoch}';
+          final json = svc.resultToJson(
+            state.result!,
+            name,
+            state.samplingIntervalSeconds ?? 0.0,
+          );
+          await svc.share(json, runName: name);
+        },
+      ),
+    );
   }
 }
 

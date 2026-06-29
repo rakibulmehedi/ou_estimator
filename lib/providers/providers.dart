@@ -3,6 +3,7 @@ import 'package:isar_community/isar.dart';
 
 import '../data/models/ou_metrics.dart';
 import '../data/repositories/estimation_repository.dart';
+import '../data/services/export_service.dart';
 import '../data/services/file_import_service.dart';
 import '../data/services/text_input_parser.dart';
 import '../domain/use_cases/mle_estimator.dart';
@@ -42,6 +43,9 @@ final selectedTabProvider = StateProvider<int>((ref) => 0);
 /// EstimationController.loadFromHistory writes joined series; InputPanel
 /// consumes via ref.listen and resets to empty after applying.
 final seriesTextProvider = StateProvider<String>((ref) => '');
+
+final exportServiceProvider =
+    Provider<ExportService>((ref) => const ExportService());
 
 /// Loads all saved estimation runs, newest-first.
 final historyProvider = FutureProvider.autoDispose<List<OUMetrics>>((ref) {
