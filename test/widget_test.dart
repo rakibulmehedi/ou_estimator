@@ -18,6 +18,6 @@ void main() {
     );
 
     expect(find.text('Compute'), findsOneWidget);
-    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byKey(const Key('series-input')), findsOneWidget);
   });
 }

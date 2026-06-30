@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ou_estimator/domain/use_cases/ou_estimator.dart';
+import 'package:ou_estimator/domain/value/estimation_method.dart';
 
 /// Standard normal sample via Box-Muller (u1 guarded against 0).
 double _gauss(Random r) {
@@ -93,5 +94,64 @@ void main() {
     } on NonStationaryException {
       // Also acceptable: b landed >= 1.
     }
+  });
+
+  test('dt scales theta inversely and half-life proportionally', () {
+    final estimator = OUEstimator();
+    final series = _meanReverting(n: 60, b: 0.8, mu: 10.0, noise: 0.3);
+    final r1 = estimator.estimate(series, dt: 1.0);
+    final r2 = estimator.estimate(series, dt: 2.0);
+    expect(r2.theta, closeTo(r1.theta / 2, 1e-9));
+    expect(r2.halfLife, closeTo(r1.halfLife * 2, 1e-9));
+  });
+
+  test('E: rSquared is in [0, 1] for mean-reverting series', () {
+    final series = _meanReverting();
+    final result = OUEstimator().estimate(series);
+    expect(result.rSquared, inInclusiveRange(0.0, 1.0));
+  });
+
+  test('F: residualStd is positive and finite', () {
+    final series = _meanReverting();
+    final result = OUEstimator().estimate(series);
+    expect(result.residualStd, greaterThan(0));
+    expect(result.residualStd.isFinite, isTrue);
+  });
+
+  test('G: logLikelihood is finite', () {
+    final series = _meanReverting();
+    final result = OUEstimator().estimate(series);
+    expect(result.logLikelihood.isFinite, isTrue);
+  });
+
+  test('H: numObservations equals series.length - 1', () {
+    final series = _meanReverting(n: 100);
+    final result = OUEstimator().estimate(series);
+    expect(result.numObservations, 99);
+  });
+
+  test('I: method is ols', () {
+    // Monotonically converging to mean — b is well-defined and in (0,1).
+    final result =
+        OUEstimator().estimate([8.0, 9.0, 9.5, 9.8, 10.0]);
+    expect(result.method, EstimationMethod.ols);
+  });
+
+  test('J: throws ArgumentError when dt <= 0', () {
+    expect(
+      () => OUEstimator().estimate([1.0, 2.0, 3.0], dt: 0.0),
+      throwsA(isA<ArgumentError>()),
+    );
+    expect(
+      () => OUEstimator().estimate([1.0, 2.0, 3.0], dt: -1.0),
+      throwsA(isA<ArgumentError>()),
+    );
+  });
+
+  test('K: throws NonStationaryException for a constant series', () {
+    expect(
+      () => OUEstimator().estimate([5.0, 5.0, 5.0, 5.0, 5.0]),
+      throwsA(isA<NonStationaryException>()),
+    );
   });
 }

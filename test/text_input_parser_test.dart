@@ -4,23 +4,56 @@ import 'package:ou_estimator/data/services/text_input_parser.dart';
 void main() {
   const parser = TextInputParser();
 
-  test('parses comma-separated doubles', () {
-    expect(parser.parse('1, 2.5, 3'), [1.0, 2.5, 3.0]);
+  test('newline input: one value per line', () {
+    final r = parser.parse('1\n2.5\n3');
+    expect(r.values, [1.0, 2.5, 3.0]);
+    expect(r.error, isNull);
   });
 
-  test('tolerates whitespace and newlines', () {
-    expect(parser.parse('1\n2  3,4'), [1.0, 2.0, 3.0, 4.0]);
+  test('newline input: takes first numeric column, skips header row', () {
+    final r = parser.parse('price,volume\n10,500\n11,600\n12,700');
+    expect(r.values, [10.0, 11.0, 12.0]);
+    expect(r.error, isNull);
   });
 
-  test('parses negative and decimal values', () {
-    expect(parser.parse('-1.5, 0, 2.25'), [-1.5, 0.0, 2.25]);
+  test('strips currency symbols and spaces', () {
+    final r = parser.parse(r'$10, $11, £12');
+    expect(r.values, [10.0, 11.0, 12.0]);
   });
 
-  test('throws FormatException on a non-numeric token', () {
-    expect(() => parser.parse('1, x, 3'), throwsFormatException);
+  test('single line: splits on commas and whitespace', () {
+    final r = parser.parse('1, 2 3\t4');
+    expect(r.values, [1.0, 2.0, 3.0, 4.0]);
+    expect(r.warning, isNull);
   });
 
-  test('throws FormatException on empty input', () {
-    expect(() => parser.parse('   '), throwsFormatException);
+  test('single-line thousands grouping raises a non-blocking warning', () {
+    final r = parser.parse('1,000 2,000');
+    expect(r.warning, isNotNull);
+  });
+
+  test('empty input: error, not throw', () {
+    final r = parser.parse('   ');
+    expect(r.values, isEmpty);
+    expect(r.error, isNotNull);
+    expect(r.canCompute, isFalse);
+  });
+
+  test('bad token: error with partial values', () {
+    final r = parser.parse('1, x, 3');
+    expect(r.error, isNotNull);
+    expect(r.values, [1.0]); // parsed before the bad token
+  });
+
+  test('count, min, max', () {
+    final r = parser.parse('3\n1\n2');
+    expect(r.count, 3);
+    expect(r.min, 1.0);
+    expect(r.max, 3.0);
+  });
+
+  test('canCompute gates on >= 3 valid points', () {
+    expect(parser.parse('1\n2').canCompute, isFalse);
+    expect(parser.parse('1\n2\n3').canCompute, isTrue);
   });
 }

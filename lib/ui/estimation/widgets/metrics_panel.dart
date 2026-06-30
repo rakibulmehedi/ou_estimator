@@ -11,17 +11,22 @@ import '../../core/widgets/glass_card.dart';
 /// which the screen reads from the existing Riverpod provider — this widget
 /// holds no state and registers no listeners.
 class MetricsPanel extends StatelessWidget {
-  const MetricsPanel({super.key, required this.result});
+  const MetricsPanel({super.key, required this.result, this.unitLabel = 'step'});
 
   final OUResult result;
+
+  /// Singular Δt unit label (e.g. 'day') for θ ("per <label>") and half-life.
+  final String unitLabel;
 
   @override
   Widget build(BuildContext context) {
     final items = <_Metric>[
-      _Metric('θ', 'Mean Reversion', result.theta.toStringAsFixed(4), 'speed'),
+      _Metric('θ', 'Mean Reversion', result.theta.toStringAsFixed(4),
+          'per $unitLabel'),
       _Metric('μ', 'Equilibrium', result.mu.toStringAsFixed(4), 'long-run mean'),
       _Metric('σ', 'Volatility', result.sigma.toStringAsFixed(4), 'diffusion'),
-      _Metric('t½', 'Half-Life', result.halfLife.toStringAsFixed(3), 'steps'),
+      _Metric('t½', 'Half-Life', result.halfLife.toStringAsFixed(3),
+          '${unitLabel}s'),
     ];
 
     return GridView.count(

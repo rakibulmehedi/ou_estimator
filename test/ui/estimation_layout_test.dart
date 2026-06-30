@@ -22,14 +22,14 @@ void main() {
       (tester) async {
     await _pumpAt(tester, const Size(400, 900));
     expect(find.byKey(const Key('estimation-two-pane')), findsNothing);
-    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byKey(const Key('series-input')), findsOneWidget);
     expect(find.text('Compute'), findsOneWidget);
   });
 
   testWidgets('expanded width: two-pane layout present', (tester) async {
     await _pumpAt(tester, const Size(1200, 900));
     expect(find.byKey(const Key('estimation-two-pane')), findsOneWidget);
-    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byKey(const Key('series-input')), findsOneWidget);
     expect(find.text('Compute'), findsOneWidget);
   });
 }
