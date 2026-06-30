@@ -59,6 +59,11 @@ class _InputPanelState extends ConsumerState<InputPanel> {
 
   bool get _canCompute => _parsed.canCompute && _dtValue > 0;
 
+  void _clear() {
+    _seriesController.clear();
+    ref.read(estimationControllerProvider.notifier).clear();
+  }
+
   Future<void> _importFile() async {
     final text = await ref.read(fileImportServiceProvider).pickTextFile();
     if (text == null || !mounted) return;
@@ -96,8 +101,15 @@ class _InputPanelState extends ConsumerState<InputPanel> {
           style: const TextStyle(
             fontFeatures: [FontFeature.tabularFigures()],
           ),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'e.g. 10\\n9.8\\n10.2  — or  10, 9.8, 10.2',
+            suffixIcon: _seriesController.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.clear),
+                    tooltip: 'Clear',
+                    onPressed: _clear,
+                  )
+                : null,
           ),
         ),
         const SizedBox(height: Spacing.sm),

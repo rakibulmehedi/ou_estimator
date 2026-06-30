@@ -44,4 +44,23 @@ void main() {
     expect(find.byKey(const Key('dt-value-input')), findsOneWidget);
     expect(find.byType(DropdownButton<DtUnitOption>), findsOneWidget);
   });
+
+  testWidgets('clear button appears when text is non-empty and clears the field',
+      (tester) async {
+    await _pump(tester);
+
+    // The seed series is pre-filled, so the clear icon should already be visible.
+    expect(find.byIcon(Icons.clear), findsOneWidget);
+
+    // Tap the clear button.
+    await tester.tap(find.byIcon(Icons.clear));
+    await tester.pump();
+
+    // The text field should now be empty and the clear icon should disappear.
+    final seriesField = tester.widget<TextField>(
+      find.byKey(const Key('series-input')),
+    );
+    expect(seriesField.controller!.text, isEmpty);
+    expect(find.byIcon(Icons.clear), findsNothing);
+  });
 }
