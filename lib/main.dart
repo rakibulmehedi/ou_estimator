@@ -26,7 +26,13 @@ Future<void> main() async {
 
   // Catches unhandled async errors that reach the platform dispatcher.
   PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    return true; // absorbed — return true prevents OS-level crash
+    if (kDebugMode) {
+      FlutterError.presentError(
+        FlutterErrorDetails(exception: error, stack: stack),
+      );
+    }
+    // TODO: forward to crash reporting (e.g. Firebase Crashlytics) in release
+    return true;
   };
 
   final isarService = await IsarService.open();
