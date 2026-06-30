@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1290" height="2796" viewBox="0 0 1290 2796">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08101c"/>
+      <stop offset="0.55" stop-color="#111827"/>
+      <stop offset="1" stop-color="#07140f"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-20%" width="160%" height="150%">
+      <feDropShadow dx="0" dy="34" stdDeviation="34" flood-color="#000000" flood-opacity="0.44"/>
+    </filter>
+    <clipPath id="phoneClip"><rect x="158" y="748" width="974" height="2116" rx="86"/></clipPath>
+  </defs>
+  <rect width="1290" height="2796" fill="url(#bg)"/>
+  <g opacity="0.12" stroke="#8aa4c7" stroke-width="1">
+    <path d="M0 210H1290M0 420H1290M0 630H1290M0 840H1290M0 1050H1290M0 1260H1290M0 1470H1290M0 1680H1290M0 1890H1290M0 2100H1290M0 2310H1290M0 2520H1290"/>
+    <path d="M129 0V2796M258 0V2796M387 0V2796M516 0V2796M645 0V2796M774 0V2796M903 0V2796M1032 0V2796M1161 0V2796"/>
+  </g>
+  <text x="90" y="182" fill="#59d98c" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">PRICE SERIES IN</text>
+  <text x="90" y="292" fill="#eff5ff" font-family="Inter, Arial, sans-serif" font-size="92" font-weight="800">Estimate mean</text>
+  <text x="90" y="394" fill="#eff5ff" font-family="Inter, Arial, sans-serif" font-size="92" font-weight="800">reversion fast</text>
+  <text x="92" y="474" fill="#9aa8bb" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="500">Paste values or import CSV/TXT. Run OLS or exact MLE.</text>
+  <g transform="translate(90 548)">
+    <rect width="318" height="86" rx="43" fill="#182235" stroke="#344157"/>
+    <text x="38" y="55" fill="#dfe7f4" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">OLS</text>
+    <circle cx="146" cy="43" r="7" fill="#59d98c"/>
+    <text x="178" y="55" fill="#dfe7f4" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">MLE</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="132" y="722" width="1026" height="2170" rx="112" fill="#060a11"/>
+    <rect x="158" y="748" width="974" height="2116" rx="86" fill="#0b1018"/>
+    <image href="../../screenshots/screen_main2.png" x="158" y="748" width="974" height="2116" preserveAspectRatio="xMidYMid slice" clip-path="url(#phoneClip)"/>
+  </g>
+</svg>

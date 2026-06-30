@@ -54,3 +54,13 @@ flutter_*.log
 
 # FVM local Flutter SDK symlink
 .fvm/flutter_sdk
+.github-audit/
+.superpowers/
+.commandcode/
+
+# Xcode machine-specific workspace metadata
+ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+
+# Android build artifacts
+android/build/
