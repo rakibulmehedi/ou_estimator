@@ -100,6 +100,7 @@ Linked via `IsarLink<TimeSeriesData>` on `OUMetrics`. Run `make codegen` after a
 
 ```json
 {
+  "version": 1,
   "name": "AAPL_daily",
   "method": "ols",
   "estimatedAt": "2026-06-30T00:00:00.000Z",
@@ -137,6 +138,7 @@ make test
 |---------|---------|
 | `flutter_riverpod ^2.5.1` | State management |
 | `isar_community ^3.3.2` | Local persistence (Dart 3.12 fork) |
+| `isar_community_flutter_libs ^3.3.2` | Isar native libraries (Android/iOS/macOS) |
 | `path_provider ^2.1.4` | App directory access |
 | `file_picker ^8.1.0` | CSV/TXT import |
 | `fl_chart ^0.69.0` | Price + mean-reversion chart |

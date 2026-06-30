@@ -10,10 +10,10 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - **MLE estimation**: choose between OLS (discrete AR(1)) and MLE (exact O-U transition density) via `SegmentedButton` toggle
 - **Nelder-Mead simplex optimizer**: pure-Dart, dependency-free; powers MLE parameter search
 - **Fit diagnostics panel**: R², residual std (σ̂), log-likelihood, observation count as glass cards with staggered entrance animation
-- **Sampling interval control**: `DtUnit` enum (steps / seconds / minutes / hours / days / weeks); InputPanel Δt field + unit picker; all estimation paths scale to seconds internally
+- **Sampling interval control**: `DtUnit` enum (steps / seconds / minutes / hours / days / weeks / months / years); InputPanel Δt field + unit picker; raw Δt value feeds the estimators, converted to seconds only for persistence in `OUMetrics`
 - **File import**: load CSV/TXT price series from device via `file_picker`; macOS sandbox entitlement included
 - **InputPanel**: unified data-entry widget — text area, Δt controls, file-import button, live parse validation (`ValidationSummary`)
-- **History screen**: paginated list of saved runs — method badge (OLS/MLE), θ, half-life, relative timestamp
+- **History screen**: scrollable list of saved runs — method badge (OLS/MLE), θ, half-life, relative timestamp
 - **History actions**: tap to reload series into estimator; inline rename and delete with confirmation dialog; JSON export/share per run
 - **Export / Share**: `ExportService` serializes result or saved run to versioned JSON (`"version": 1`) and opens native OS share sheet via `share_plus`; share button on both estimation results and history cards
 - `selectedTabProvider` — programmatic tab switching (History → Estimation after load)
