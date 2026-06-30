@@ -6,6 +6,7 @@
 
 [![CI](https://github.com/rakibulmehedi/ou_estimator/actions/workflows/ci.yml/badge.svg)](https://github.com/rakibulmehedi/ou_estimator/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/github/v/release/rakibulmehedi/ou_estimator)](https://github.com/rakibulmehedi/ou_estimator/releases)
+[![License](https://img.shields.io/github/license/rakibulmehedi/ou_estimator)](LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.22-blue)](https://flutter.dev)
 
 Mean reversion timing is everything in pairs trading. ou_estimator fits Ornstein-Uhlenbeck parameters (theta, mu, sigma, and half-life) from any uniformly-sampled price series on your phone, using OLS regression for instant results or exact MLE for maximum accuracy.
@@ -182,8 +183,8 @@ make test
 
 ## Contributing
 
-Contributions welcome. Open an issue before submitting a PR for significant changes.
+Contributions welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, commit conventions, and the PR process.
 
 ## License
 
-No license has been set. Run `/github legal` to add one.
+MIT. See [LICENSE](LICENSE).
