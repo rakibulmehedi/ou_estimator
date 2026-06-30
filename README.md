@@ -129,7 +129,7 @@ make test
 | `ui/` (9 files) | Widget smoke tests, layout, glass cards |
 <!-- END AUTO-GENERATED -->
 
-67 tests, 0 failures.
+84 tests, 0 failures.
 
 ## Dependencies
 
