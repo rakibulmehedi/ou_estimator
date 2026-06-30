@@ -31,7 +31,7 @@ dependencies:
   flutter_animate: ^4.5.0
 
   # Export / share (sub-projects #5)
-  share_plus: ^10.0.0
+  share_plus: ^12.0.2
 
 dev_dependencies:
   flutter_test:
