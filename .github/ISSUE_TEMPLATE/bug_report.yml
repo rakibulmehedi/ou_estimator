@@ -1,0 +1,104 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in ou_estimator
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill in as much detail as possible.
+        If you have a question rather than a bug, please use [Discussions](https://github.com/rakibulmehedi/ou_estimator/discussions) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe what went wrong...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the behavior.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened? Include any error messages or stack traces.
+    validations:
+      required: true
+
+  - type: textarea
+    id: input_data
+    attributes:
+      label: Input Data (if applicable)
+      description: |
+        If the bug is triggered by a specific price series or CSV input, paste a small
+        sample here (10–20 rows is enough). This helps reproduce estimation bugs.
+      placeholder: |
+        100.0
+        100.3
+        99.8
+        ...
+
+  - type: input
+    id: version
+    attributes:
+      label: App Version
+      description: Found in the app's About screen or pubspec.yaml
+      placeholder: "e.g., 1.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform are you running on?
+      options:
+        - Android
+        - iOS
+        - macOS
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS Version
+      placeholder: "e.g., Android 14, iOS 17.4, macOS 15.0"
+
+  - type: dropdown
+    id: estimation_method
+    attributes:
+      label: Estimation Method (if relevant)
+      description: Which parameter estimation method was active when the bug occurred?
+      options:
+        - OLS (Ordinary Least Squares)
+        - MLE (Maximum Likelihood Estimation)
+        - Not applicable / Unknown
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Screenshots, logs, or any other context that might help.

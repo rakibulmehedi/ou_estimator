@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & Help
+    url: https://github.com/rakibulmehedi/ou_estimator/discussions
+    about: Use Discussions for questions, usage help, and general conversation
+  - name: Statistical / Math Questions
+    url: https://github.com/rakibulmehedi/ou_estimator/discussions/categories/q-a
+    about: Questions about Ornstein-Uhlenbeck theory, pairs trading, or mean reversion math

@@ -1,0 +1,35 @@
+# .gitattributes — GitHub Linguist overrides for accurate language detection
+# Primary language: Dart (ou_estimator Flutter app)
+
+# Generated and vendored files (excluded from language statistics)
+*.min.js linguist-generated
+*.min.css linguist-generated
+
+# Flutter generated files
+*.g.dart linguist-generated
+*.freezed.dart linguist-generated
+*.isar.dart linguist-generated
+
+# Build output
+build/** linguist-generated
+.dart_tool/** linguist-generated
+
+# Platform-specific native stubs (Swift, Kotlin, ObjC, Ruby are boilerplate)
+# These are Flutter's generated platform embeddings, not the project's language
+android/** linguist-vendored
+ios/** linguist-vendored
+macos/** linguist-vendored
+windows/** linguist-vendored
+linux/** linguist-vendored
+
+# Python analysis scripts — treated as documentation tooling
+*.py linguist-documentation
+
+# Ensure Dart source is detectable as the primary language
+*.dart linguist-detectable
+
+# Line ending normalization
+* text=auto
+*.dart text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
