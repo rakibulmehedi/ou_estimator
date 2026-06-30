@@ -60,8 +60,10 @@ class TextInputParser {
     for (var i = 0; i < lines.length; i++) {
       final line = lines[i].trim();
       if (line.isEmpty) continue;
-      // First column = first delimiter-separated token on the line.
-      final firstToken = line.split(_delimiter).first;
+      // Skip lines that contain only delimiters (e.g. ",,").
+      final parts = line.split(_delimiter).where((t) => t.isNotEmpty).toList();
+      if (parts.isEmpty) continue;
+      final firstToken = parts.first;
       final v = double.tryParse(_clean(firstToken));
       if (v == null) {
         // Allow a single leading non-numeric header row to be skipped.

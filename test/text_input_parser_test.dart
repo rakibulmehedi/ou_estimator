@@ -56,4 +56,36 @@ void main() {
     expect(parser.parse('1\n2').canCompute, isFalse);
     expect(parser.parse('1\n2\n3').canCompute, isTrue);
   });
+
+  // --- Edge cases: trailing commas, double commas, accidental spaces ---
+
+  test('single-line trailing comma: not an error', () {
+    final r = parser.parse('1,2,3,');
+    expect(r.values, [1.0, 2.0, 3.0]);
+    expect(r.error, isNull);
+  });
+
+  test('single-line double comma: treated as single separator', () {
+    final r = parser.parse('1,,2,,3');
+    expect(r.values, [1.0, 2.0, 3.0]);
+    expect(r.error, isNull);
+  });
+
+  test('single-line extra spaces around commas: parsed correctly', () {
+    final r = parser.parse('1 , 2 , 3');
+    expect(r.values, [1.0, 2.0, 3.0]);
+    expect(r.error, isNull);
+  });
+
+  test('multiline: line starting with comma reads first numeric token', () {
+    final r = parser.parse(',10\n20\n30');
+    expect(r.values, [10.0, 20.0, 30.0]);
+    expect(r.error, isNull);
+  });
+
+  test('multiline: comma-only line is skipped silently', () {
+    final r = parser.parse('10\n,,\n20\n30');
+    expect(r.values, [10.0, 20.0, 30.0]);
+    expect(r.error, isNull);
+  });
 }
