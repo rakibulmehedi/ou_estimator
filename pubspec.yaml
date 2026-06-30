@@ -43,7 +43,7 @@ dev_dependencies:
   # Isar codegen (analyzer >=8 — Dart 3.12 compatible)
   build_runner: ^2.4.13
   isar_community_generator: ^3.3.2
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
