@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "ou_estimator"
+abstract: "A Flutter mobile application for estimating Ornstein-Uhlenbeck process parameters (θ, μ, σ, half-life) from price series data. Supports OLS and exact MLE estimation methods — an essential tool for pairs trading and mean reversion analysis."
+version: "1.1.0"
+date-released: "2026-06-30"
+authors:
+  - family-names: "Mehedi"
+    given-names: "Rakibul Islam"
+url: "https://github.com/rakibulmehedi/ou_estimator"
+repository-code: "https://github.com/rakibulmehedi/ou_estimator"
+license: MIT
+keywords:
+  - ornstein-uhlenbeck
+  - mean-reversion
+  - pairs-trading
+  - flutter
+  - dart
+  - quantitative-finance
+  - parameter-estimation
+  - MLE
+  - OLS
