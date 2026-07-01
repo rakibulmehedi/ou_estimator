@@ -393,6 +393,163 @@ def screenshot_02_results() -> None:
     img.convert("RGB").save(DIST / "app-store-02-results.png", quality=95)
 
 
+def draw_phone_scaled(
+    canvas: Image.Image,
+    content: Path | Image.Image,
+    cx: int,
+    cy: int,
+    scale: float,
+) -> None:
+    """Draw a phone frame centred at (cx, cy) with all dimensions scaled."""
+    draw   = ImageDraw.Draw(canvas)
+    pw     = int(1026 * scale)
+    ph     = int(2170 * scale)
+    px     = cx - pw // 2
+    py     = cy - ph // 2
+    r      = max(6,  int(112 * scale))
+    sr     = max(4,  int(86  * scale))
+    bw     = max(1,  int(18  * scale))
+    sx_off = int(26 * scale)
+    sy_off = int(26 * scale)
+    sw     = int(974  * scale)
+    sh     = int(2116 * scale)
+
+    shadowed_round_rect(canvas, (px, py, pw, ph), r)
+    draw.rounded_rectangle(
+        (px, py, px + pw, py + ph),
+        radius=r, fill=(5, 8, 14), outline=(4, 20, 14), width=bw,
+    )
+    if isinstance(content, Path):
+        paste_cover(canvas, content, (px + sx_off, py + sy_off, sw, sh), sr)
+    else:
+        mask    = rounded_mask((sw, sh), sr)
+        resized = content.convert("RGBA").resize((sw, sh), Image.Resampling.LANCZOS)
+        canvas.paste(resized, (px + sx_off, py + sy_off), mask)
+
+
+def tablet_portrait_screenshot(
+    filename: str,
+    width: int,
+    height: int,
+    eyebrow: str,
+    headline: list[str],
+    subhead: str,
+    chips: list[str],
+    content: Path | Image.Image,
+    accent: tuple[int, int, int],
+) -> None:
+    """Portrait tablet screenshot scaled from the 1290-wide phone reference layout."""
+    ws   = width / 1290
+    img  = background(width, height)
+    draw = ImageDraw.Draw(img)
+    draw_grid(draw, width, height, max(80, int(210 * ws)), (138, 164, 199, 30))
+
+    pad = int(90 * ws)
+
+    draw.text(
+        (pad, int(156 * ws)), eyebrow, fill=accent,
+        font=font(INTER_BOLD, max(18, int(34 * ws))),
+    )
+
+    hl_sz = max(36, int(86 * ws))
+    hl_y  = int(224 * ws)
+    for line in headline:
+        draw.text((pad, hl_y), line, fill=(239, 245, 255), font=font(INTER_BOLD, hl_sz))
+        hl_y += int(hl_sz * 1.19)
+
+    draw.text(
+        (pad, int(444 * ws)), subhead, fill=(154, 168, 187),
+        font=font(INTER_MED, max(18, int(39 * ws))),
+    )
+
+    cf_sz  = max(14, int(34 * ws))
+    chip_f = font(INTER_BOLD, cf_sz)
+    cy0    = int(548 * ws)
+    cy1    = int(634 * ws)
+    chip_x = pad
+    for chip in chips:
+        tw    = int(draw.textlength(chip, font=chip_f))
+        pad_c = int(76 * ws)
+        draw.rounded_rectangle(
+            (chip_x, cy0, chip_x + tw + pad_c, cy1),
+            radius=int(43 * ws), fill=(24, 34, 53), outline=(52, 65, 87), width=1,
+        )
+        draw.text(
+            (chip_x + int(38 * ws), cy0 + int(28 * ws)), chip,
+            fill=(223, 231, 244), font=chip_f,
+        )
+        chip_x += tw + pad_c + int(32 * ws)
+
+    phone_top   = int(722 * ws)
+    avail_h     = height - phone_top - int(60 * ws)
+    phone_scale = min(ws, avail_h / 2170)
+    draw_phone_scaled(img, content, width // 2, phone_top + avail_h // 2, phone_scale)
+
+    img.convert("RGB").save(DIST / filename, quality=95)
+
+
+def chromebook_screenshot() -> None:
+    """2560 × 1440 landscape: phone mock centred with wide decorative side panels."""
+    W, H = 2560, 1440
+    img  = background(W, H)
+    draw = ImageDraw.Draw(img)
+    draw_grid(draw, W, H, 160, (138, 164, 199, 28))
+
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gd   = ImageDraw.Draw(glow)
+    gd.ellipse((-80, 180, 860, 1060), fill=(43, 124, 255, 20))
+    gd.ellipse((1750, -80, 2680, 640), fill=(54, 217, 138, 18))
+    img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(80)))
+
+    phone_scale = (H - 160) / 2170
+    content     = draw_results_content(974, 2116)
+    draw_phone_scaled(img, content, W // 2, H // 2, phone_scale)
+
+    pw       = int(1026 * phone_scale)
+    phone_rx = W // 2 + pw // 2
+    pad      = 100
+    accent_g = (89, 217, 140)
+    accent_b = (109, 160, 255)
+
+    # Left panel
+    lx = pad
+    draw.text((lx, 240), "OU Estimator", fill=(239, 245, 255), font=font(INTER_BOLD, 72))
+    draw.text((lx, 332), "Mean Reversion Toolkit", fill=(*accent_g, 255), font=font(INTER_SEMI, 36))
+    draw.text((lx, 400), "Estimate theta, mu, sigma and", fill=(154, 168, 187), font=font(INTER_MED, 26))
+    draw.text((lx, 436), "half-life from price series.", fill=(154, 168, 187), font=font(INTER_MED, 26))
+
+    my = 530
+    for sym, lbl, val in [
+        ("θ",  "Mean Reversion", "0.4231"),
+        ("μ",  "Equilibrium",    "104.88"),
+        ("t½", "Half-Life",      "1.638 d"),
+    ]:
+        draw.rounded_rectangle((lx, my, lx + 380, my + 90), radius=16,
+                               fill=(21, 28, 43), outline=(52, 65, 87), width=1)
+        draw.text((lx + 20, my + 10), sym,  fill=(*accent_b, 255), font=font(JET_BOLD, 36))
+        draw.text((lx + 20, my + 54), lbl,  fill=(139, 148, 158), font=font(INTER_REG, 18))
+        draw.text((lx + 248, my + 22), val, fill=(230, 237, 243),  font=font(JET_BOLD, 30))
+        my += 112
+
+    # Right panel
+    rx = phone_rx + pad
+    draw.text((rx, 240), "OLS + exact MLE", fill=(239, 245, 255), font=font(INTER_BOLD, 56))
+    draw.text((rx, 316), "Two estimation methods", fill=(154, 168, 187), font=font(INTER_MED, 26))
+
+    fy = 398
+    for feat in [
+        "Paste values or import CSV / TXT",
+        "History: reload, rename, delete",
+        "Export JSON via native share sheet",
+        "Fit diagnostics: R², σ̂, ln L, N",
+    ]:
+        draw.ellipse((rx, fy + 9, rx + 8, fy + 17), fill=(*accent_g, 255))
+        draw.text((rx + 18, fy), feat, fill=(154, 168, 187), font=font(INTER_MED, 24))
+        fy += 50
+
+    img.convert("RGB").save(DIST / "play-chromebook.png", quality=95)
+
+
 def main() -> None:
     DIST.mkdir(parents=True, exist_ok=True)
     feature_graphic()
@@ -406,6 +563,27 @@ def main() -> None:
         (89, 217, 140),
     )
     screenshot_02_results()
+    tablet_portrait_screenshot(
+        "play-tablet-7in.png",
+        1080, 1920,
+        "PRICE SERIES IN",
+        ["Estimate mean", "reversion fast"],
+        "Paste values or import CSV/TXT. Run OLS or exact MLE.",
+        ["OLS", "MLE"],
+        SCREENSHOTS / "screen_main2.png",
+        (89, 217, 140),
+    )
+    tablet_portrait_screenshot(
+        "play-tablet-10in.png",
+        1440, 2560,
+        "PARAMETERS OUT",
+        ["Theta, mu, sigma", "and half-life"],
+        "See diagnostics, equilibrium line, fit quality, and history.",
+        ["R2 0.9142", "t1/2 1.638"],
+        draw_results_content(974, 2116),
+        (109, 160, 255),
+    )
+    chromebook_screenshot()
 
 
 if __name__ == "__main__":
