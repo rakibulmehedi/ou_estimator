@@ -34,7 +34,7 @@ class HistoryScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.history,
-                      size: 56,
+                      size: IconSize.hero,
                       color: AppTheme.textPrimary.withValues(alpha: 0.18)),
                   const SizedBox(height: Spacing.md),
                   Text('Saved runs appear here',

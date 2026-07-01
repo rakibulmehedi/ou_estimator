@@ -68,10 +68,10 @@ class _Line extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 16, color: color),
+        Icon(icon, size: IconSize.sm, color: color),
         const SizedBox(width: Spacing.sm),
         Expanded(
-          child: Text(text, style: AppTheme.sans(fontSize: 12, color: color)),
+          child: Text(text, style: AppTheme.sans(fontSize: FontSize.md, color: color)),
         ),
       ],
     );

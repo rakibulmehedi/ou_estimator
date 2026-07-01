@@ -34,8 +34,8 @@ class MetricsPanel extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       childAspectRatio: 1.85,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
+      mainAxisSpacing: Spacing.md,
+      crossAxisSpacing: Spacing.md,
       children: [
         for (var i = 0; i < items.length; i++)
           _MetricCard(metric: items[i], index: i),
@@ -61,28 +61,28 @@ class _MetricCard extends StatelessWidget {
   // Styles depend only on static tokens — hoisted to avoid per-build allocation.
   static final TextStyle _symbolStyle = AppTheme.mono(
     color: AppTheme.accent,
-    fontSize: 18,
+    fontSize: FontSize.xl,
     fontWeight: FontWeight.w700,
   );
   static final TextStyle _labelStyle = AppTheme.sans(
     color: AppTheme.textSecondary,
-    fontSize: 12,
+    fontSize: FontSize.md,
   );
   static final TextStyle _valueStyle = AppTheme.mono(
     color: AppTheme.textPrimary,
-    fontSize: 24,
+    fontSize: FontSize.xxl,
     fontWeight: FontWeight.w600,
   );
   // textSecondary (≈5.6:1 on the glass card) clears WCAG AA at this small size.
   static final TextStyle _unitStyle = AppTheme.sans(
     color: AppTheme.textSecondary,
-    fontSize: 11,
+    fontSize: FontSize.sm,
   );
 
   @override
   Widget build(BuildContext context) {
     final card = GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.lg, vertical: Spacing.md),
       child: Semantics(
         label: '${metric.label}: ${metric.value} ${metric.unit}',
         child: ExcludeSemantics(
@@ -93,7 +93,7 @@ class _MetricCard extends StatelessWidget {
               Row(
                 children: [
                   Text(metric.symbol, style: _symbolStyle),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: Spacing.sm),
                   Expanded(
                     child: Text(
                       metric.label,
@@ -113,8 +113,8 @@ class _MetricCard extends StatelessWidget {
 
     // Presentation-only staggered entrance. No rebuild/state coupling.
     return card
-        .animate(delay: (index * 80).ms)
+        .animate(delay: Motion.stagger * index)
         .fadeIn(duration: Motion.slow, curve: Motion.curve)
-        .slideY(begin: 0.1, end: 0, duration: Motion.slow, curve: Motion.curve);
+        .slideY(begin: Motion.enterSlide, end: 0, duration: Motion.slow, curve: Motion.curve);
   }
 }

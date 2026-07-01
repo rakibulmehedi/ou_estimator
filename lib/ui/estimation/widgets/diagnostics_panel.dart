@@ -55,27 +55,27 @@ class _DiagnosticCard extends StatelessWidget {
 
   static final TextStyle _symbolStyle = AppTheme.mono(
     color: AppTheme.accent,
-    fontSize: 18,
+    fontSize: FontSize.xl,
     fontWeight: FontWeight.w700,
   );
   static final TextStyle _labelStyle = AppTheme.sans(
     color: AppTheme.textSecondary,
-    fontSize: 12,
+    fontSize: FontSize.md,
   );
   static final TextStyle _valueStyle = AppTheme.mono(
     color: AppTheme.textPrimary,
-    fontSize: 24,
+    fontSize: FontSize.xxl,
     fontWeight: FontWeight.w600,
   );
   static final TextStyle _unitStyle = AppTheme.sans(
     color: AppTheme.textSecondary,
-    fontSize: 11,
+    fontSize: FontSize.sm,
   );
 
   @override
   Widget build(BuildContext context) {
     final card = GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.lg, vertical: Spacing.md),
       child: Semantics(
         label: '${metric.label}: ${metric.value} ${metric.unit}'.trim(),
         child: ExcludeSemantics(
@@ -86,7 +86,7 @@ class _DiagnosticCard extends StatelessWidget {
               Row(
                 children: [
                   Text(metric.symbol, style: _symbolStyle),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: Spacing.sm),
                   Expanded(
                     child: Text(
                       metric.label,
@@ -106,8 +106,8 @@ class _DiagnosticCard extends StatelessWidget {
     );
 
     return card
-        .animate(delay: (index * 80).ms)
+        .animate(delay: Motion.stagger * index)
         .fadeIn(duration: Motion.slow, curve: Motion.curve)
-        .slideY(begin: 0.1, end: 0, duration: Motion.slow, curve: Motion.curve);
+        .slideY(begin: Motion.enterSlide, end: 0, duration: Motion.slow, curve: Motion.curve);
   }
 }

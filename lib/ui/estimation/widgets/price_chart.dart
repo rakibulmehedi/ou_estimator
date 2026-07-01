@@ -16,10 +16,10 @@ class PriceChart extends StatelessWidget {
 
   // Axis / tooltip text styles — hoisted to avoid per-tick allocation.
   static final TextStyle _axisStyle =
-      AppTheme.mono(color: AppTheme.textSecondary, fontSize: 10);
+      AppTheme.mono(color: AppTheme.textSecondary, fontSize: FontSize.xs);
   static final TextStyle _tooltipStyle = AppTheme.mono(
     color: AppTheme.textPrimary,
-    fontSize: 13,
+    fontSize: FontSize.lg,
     fontWeight: FontWeight.w600,
   );
 
@@ -115,7 +115,7 @@ class PriceChart extends StatelessWidget {
                 getTooltipColor: (_) => AppTheme.surfaceElevated,
                 tooltipRoundedRadius: Radii.sm,
                 tooltipPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: Spacing.md, vertical: Spacing.sm),
                 tooltipBorder: const BorderSide(color: AppTheme.glassBorder),
                 getTooltipItems: (touchedSpots) {
                   return touchedSpots.map((spot) {
@@ -186,7 +186,7 @@ class PriceChart extends StatelessWidget {
       return const SizedBox.shrink();
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: Spacing.sm),
       child: Text(value.toInt().toString(), style: _axisStyle),
     );
   }

@@ -126,10 +126,10 @@ class HistoryRunCard extends ConsumerWidget {
           't½=${metrics.halfLife.toStringAsFixed(2)}  '
           '${_relativeTime(metrics.estimatedAt)}',
           style:
-              AppTheme.sans(color: AppTheme.textSecondary, fontSize: 12),
+              AppTheme.sans(color: AppTheme.textSecondary, fontSize: FontSize.md),
         ),
         leading: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: Spacing.sm, vertical: Spacing.xs),
           decoration: BoxDecoration(
             border: Border.all(
                 color: methodBadgeColor.withValues(alpha: 0.6)),
@@ -139,7 +139,7 @@ class HistoryRunCard extends ConsumerWidget {
             metrics.method.name.toUpperCase(),
             style: AppTheme.mono(
                 color: methodBadgeColor,
-                fontSize: 11,
+                fontSize: FontSize.sm,
                 fontWeight: FontWeight.w700),
           ),
         ),
@@ -147,18 +147,18 @@ class HistoryRunCard extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.share_rounded, size: 18),
+              icon: const Icon(Icons.share_rounded, size: IconSize.md),
               tooltip: 'Export JSON',
               onPressed: handleShare,
             ),
             IconButton(
-              icon: const Icon(Icons.drive_file_rename_outline, size: 18),
+              icon: const Icon(Icons.drive_file_rename_outline, size: IconSize.md),
               tooltip: 'Rename',
               onPressed: handleRename,
             ),
             IconButton(
               icon: Icon(Icons.delete_outline,
-                  size: 18,
+                  size: IconSize.md,
                   color: Theme.of(context).colorScheme.error),
               tooltip: 'Delete',
               onPressed: handleDelete,

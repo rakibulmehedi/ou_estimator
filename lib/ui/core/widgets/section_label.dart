@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../tokens.dart';
 
 /// Caption shown above an input field or content section. Centralizes the
 /// muted-secondary label style used across screens.
@@ -14,7 +15,7 @@ class SectionLabel extends StatelessWidget {
     return Text(
       text,
       style: AppTheme.sans(
-        fontSize: 13,
+        fontSize: FontSize.lg,
         fontWeight: FontWeight.w500,
         color: AppTheme.textSecondary,
       ),

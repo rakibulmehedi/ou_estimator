@@ -183,8 +183,8 @@ class _InputPanelState extends ConsumerState<InputPanel> {
                   ),
           icon: state.loading
               ? const SizedBox(
-                  height: 18,
-                  width: 18,
+                  height: IconSize.md,
+                  width: IconSize.md,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.calculate_outlined),
@@ -207,7 +207,7 @@ class _ErrorBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: Spacing.md),
       decoration: BoxDecoration(
         color: scheme.errorContainer.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(Radii.md),
@@ -215,7 +215,7 @@ class _ErrorBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.error_outline, color: scheme.error, size: 20),
+          Icon(Icons.error_outline, color: scheme.error, size: IconSize.lg),
           const SizedBox(width: 10),
           Expanded(
             child: Text(message, style: TextStyle(color: scheme.onErrorContainer)),

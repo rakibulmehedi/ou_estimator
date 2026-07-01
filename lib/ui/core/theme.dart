@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'tokens.dart';
+
 /// Premium fintech dark theme for the O–U estimator.
 ///
 /// Typography is bundled offline (see `assets/google_fonts/`): body/labels use
@@ -119,7 +121,7 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
         titleTextStyle: sans(
-          fontSize: 20,
+          fontSize: FontSize.title,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
@@ -129,15 +131,15 @@ class AppTheme {
         fillColor: surface,
         hintStyle: sans(color: textSecondary),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(Radii.md),
           borderSide: const BorderSide(color: border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(Radii.md),
           borderSide: const BorderSide(color: border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(Radii.md),
           borderSide: const BorderSide(color: accent, width: 1.5),
         ),
       ),
@@ -146,9 +148,9 @@ class AppTheme {
           minimumSize: const Size.fromHeight(52),
           backgroundColor: accent,
           foregroundColor: Colors.white,
-          textStyle: sans(fontSize: 15, fontWeight: FontWeight.w600),
+          textStyle: sans(fontSize: FontSize.body, fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(Radii.md),
           ),
         ),
       ),

@@ -60,7 +60,7 @@ class _EstimationScreenState extends ConsumerState<EstimationScreen> {
                   Spacing.lg, Spacing.sm, Spacing.lg, Spacing.xxl),
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 640),
+                  constraints: const BoxConstraints(maxWidth: Breakpoints.contentMaxWidth),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -125,7 +125,7 @@ class _ShareButton extends ConsumerWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: OutlinedButton.icon(
-        icon: const Icon(Icons.share_rounded, size: 18),
+        icon: const Icon(Icons.share_rounded, size: IconSize.md),
         label: const Text('Export JSON'),
         onPressed: () async {
           final svc = ref.read(exportServiceProvider);
@@ -161,12 +161,12 @@ class _Legend extends StatelessWidget {
         _swatch(scheme.primary, solid: true),
         const SizedBox(width: 6),
         const Text('Price',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: FontSize.md)),
         const SizedBox(width: 20),
         _swatch(Colors.redAccent, solid: false),
         const SizedBox(width: 6),
         const Text('μ equilibrium',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: FontSize.md)),
       ],
     );
   }
@@ -192,8 +192,8 @@ class _EmptyHint extends StatelessWidget {
     return Column(
       children: [
         Icon(Icons.show_chart,
-            size: 56, color: AppTheme.textPrimary.withValues(alpha: 0.18)),
-        const SizedBox(height: 12),
+            size: IconSize.hero, color: AppTheme.textPrimary.withValues(alpha: 0.18)),
+        const SizedBox(height: Spacing.md),
         const Text(
           'Enter a price series and tap Compute\nto estimate the O–U parameters.',
           textAlign: TextAlign.center,
