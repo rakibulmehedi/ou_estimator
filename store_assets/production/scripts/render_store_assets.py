@@ -144,6 +144,24 @@ def feature_graphic() -> None:
     img.convert("RGB").save(DIST / "google-play-feature.png", quality=95)
 
 
+def apple_icon() -> None:
+    """1024 × 1024 RGB PNG — Apple App Store icon, no transparency."""
+    src  = Image.open(REPO / "assets" / "app_icon.jpg").convert("RGB")
+    side = min(src.width, src.height)
+    left = (src.width  - side) // 2
+    top  = (src.height - side) // 2
+    icon = src.crop((left, top, left + side, top + side))
+    icon.resize((1024, 1024), Image.Resampling.LANCZOS).save(DIST / "apple-icon-1024.png")
+
+
+def play_icon() -> None:
+    """512 × 512 RGB PNG — Play Store icon, alpha flattened onto app background."""
+    src = Image.open(REPO / "store_assets" / "icon_512.png").convert("RGBA")
+    bg  = Image.new("RGB", src.size, (7, 11, 18))
+    bg.paste(src, mask=src.split()[3])
+    bg.resize((512, 512), Image.Resampling.LANCZOS).save(DIST / "play-icon-512.png")
+
+
 def draw_phone_content(canvas: Image.Image, content: Image.Image, y_offset: int) -> None:
     draw = ImageDraw.Draw(canvas)
     x, y, w, h = 132, y_offset, 1026, 2170
@@ -552,6 +570,8 @@ def chromebook_screenshot() -> None:
 
 def main() -> None:
     DIST.mkdir(parents=True, exist_ok=True)
+    apple_icon()
+    play_icon()
     feature_graphic()
     screenshot_asset(
         "app-store-01-input.png",
