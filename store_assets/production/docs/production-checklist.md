@@ -2,29 +2,47 @@
 
 ## Required Assets
 
-- Apple app icon: 1024 x 1024 PNG, no transparency.
-- Apple screenshots: upload 6.9-inch set first. Current production size: 1290 x 2796 PNG.
-- Google Play icon: 512 x 512 PNG, 32-bit PNG, max 1024 KB.
-- Google Play feature graphic: 1024 x 500 JPEG or 24-bit PNG, no alpha.
-- Google Play phone screenshots: at least 2 screenshots, JPEG or 24-bit PNG, min 320 px, max 3840 px per side.
+- Apple app icon: 1024 × 1024 PNG, no transparency.
+- Apple screenshots: 6.9-inch set (1290 × 2796). Upload all four slots.
+- Google Play icon: 512 × 512 PNG, RGB, no alpha.
+- Google Play feature graphic: 1024 × 500 RGB PNG, no alpha.
+- Google Play phone screenshots: at least 2, RGB PNG, sides 320–3840 px.
+- Google Play 7-inch tablet: 1080 × 1920 RGB PNG (9:16 portrait).
+- Google Play 10-inch tablet: 1440 × 2560 RGB PNG (9:16 portrait).
+- Google Play Chromebook: 2560 × 1440 RGB PNG (16:9 landscape).
 
-## Current Package
+## Dist Package (all RGB — upload-ready)
 
-- Existing icon: `store_assets/icon_512.png`
-- Existing feature graphic: `store_assets/feature_graphic.png`
-- Existing raw screenshots:
-  - `store_assets/screenshots/screen_main2.png`
-  - `store_assets/screenshots/screen_results_final.png`
-- New production sources:
-  - `store_assets/production/src/google-play-feature.svg`
-  - `store_assets/production/src/app-store-01-input.svg`
-  - `store_assets/production/src/app-store-02-results.svg`
+| File | Store slot | Size |
+|---|---|---|
+| `dist/apple-icon-1024.png` | Apple icon | 1024 × 1024 |
+| `dist/play-icon-512.png` | Play icon | 512 × 512 |
+| `dist/google-play-feature.png` | Play feature graphic | 1024 × 500 |
+| `dist/app-store-01-input.png` | Apple screenshot 1 · Play phone 1 | 1290 × 2796 |
+| `dist/app-store-02-results.png` | Apple screenshot 2 · Play phone 2 | 1290 × 2796 |
+| `dist/app-store-03-history.png` | Apple screenshot 3 | 1290 × 2796 |
+| `dist/app-store-04-export.png` | Apple screenshot 4 | 1290 × 2796 |
+| `dist/play-tablet-7in.png` | Play 7-inch tablet | 1080 × 1920 |
+| `dist/play-tablet-10in.png` | Play 10-inch tablet | 1440 × 2560 |
+| `dist/play-chromebook.png` | Play Chromebook | 2560 × 1440 |
+
+## Source Files
+
+- `src/google-play-feature.svg` — feature graphic source
+- `src/app-store-01-input.svg` — input screen source
+
+All other screens (results, history, export, tablet, Chromebook) are fully synthetic.
+No additional SVG sources exist or are needed for them.
+
+## Regenerate All Assets
+
+```bash
+cd store_assets/production && python3 scripts/render_store_assets.py
+```
 
 ## Before Upload
 
-- Export SVG sources to PNG.
-- Check text at final pixel size on real device preview.
-- Add History screenshot.
-- Add Export/share screenshot.
-- Confirm app name consistency: `OU Estimator` in store, `O-U Parameter Estimator` in app UI acceptable but less consistent.
-- Fix broken symbol rendering in raw result screenshot before final upload if possible.
+- Confirm `android:label="OU Estimator"` in `android/app/src/main/AndroidManifest.xml`.
+- Confirm `store_assets/feature_graphic.png` is RGB mode (no alpha).
+- Confirm `pubspec.yaml` `version: X.Y.Z+N` versionCode `N` matches Play Console.
+- App name in both stores must be exactly: `OU Estimator`.
